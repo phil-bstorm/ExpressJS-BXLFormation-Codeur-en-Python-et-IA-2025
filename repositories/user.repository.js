@@ -64,7 +64,7 @@ remove = (user) => {
     res();
   });
   */
-  user.destroy();
+  return user.destroy();
 };
 
 module.exports = {
