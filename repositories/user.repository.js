@@ -1,4 +1,7 @@
-let data = require("../mock/userdatas.json");
+const { where } = require("sequelize");
+const {
+  models: { users },
+} = require("../models");
 
 //INTERNAL
 findNextId = () => {
@@ -9,48 +12,60 @@ findNextId = () => {
 //
 
 findAll = () => {
-  return new Promise((res, rej) => res(data));
+  return users.findAll();
 };
 
 findFiltered = (firstname) => {
-  return new Promise((res, rej) => {
-    const result = data.filter(
-      (u) => u.firstname.toLowerCase() == firstname?.toLowerCase()
-    );
-    res(result);
+  return users.findAll({
+    where: {
+      firstname: firstname, // TODO rendre insenssible à la case
+    },
   });
 };
 
 findById = (id) => {
-  return new Promise((res, rej) => {
-    const user = data.find((u) => u.id == id);
-    res(user);
-  });
+  /*return users.findOne({
+    where: {
+      id: id,
+    },
+  });*/
+
+  return users.findByPk(id);
 };
 
 create = (user) => {
-  return new Promise((res, rej) => {
+  /*return new Promise((res, rej) => {
     const nextId = findNextId();
     user.id = nextId;
     data.push(user);
     res();
-  });
+  });*/
+
+  return users.create(user);
 };
 
 update = (currentUser, user) => {
-    return new Promise((res, rej) => {
-        currentUser.firstname = user.firstname;
-        currentUser.alias = user.alias;
-        res();
-    })
-}
+  /*
+  return new Promise((res, rej) => {
+    currentUser.firstname = user.firstname;
+    currentUser.alias = user.alias;
+    res();
+  });*/
+  currentUser.firstname = user.firstname;
+  currentUser.alias = user.alias;
+
+  return currentUser.save();
+};
 
 remove = (user) => {
-    return new Promise((res, rej) => {
-        data = data.filter(u => u.id != user.id)
-        res()
-    })
-}
+  /*
+  return new Promise((res, rej) => {
+    data = data.filter((u) => u.id != user.id);
+    res();
+  });
+  */
+  user.destroy();
+};
 
 module.exports = {
   findAll,
