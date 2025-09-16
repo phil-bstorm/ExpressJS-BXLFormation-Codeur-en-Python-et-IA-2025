@@ -1,0 +1,37 @@
+[
+    {
+        "id":1,
+        "firstname": "Jérôme",
+        "alias": "Herr Professor"
+    },
+    {
+        "id":2,
+        "firstname": "Vincent",
+        "alias": "ChatGPT"
+    },
+    {
+        "id":3,
+        "firstname": "Vincent",
+        "alias": "Javaboss"
+    },
+    {
+        "id":4,
+        "firstname": "Fabrice",
+        "alias": "The Hater"
+    },
+    {
+        "id":5,
+        "firstname": "Nicolas",
+        "alias": "Sleeping Beauty"
+    },
+    {
+        "id":6,
+        "firstname": "Joachim",
+        "alias": "Et si?"
+    },
+    {
+        "id":7,
+        "firstname": "Sacha",
+        "alias": "Catchem all"
+    }
+]
