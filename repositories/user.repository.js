@@ -51,8 +51,8 @@ update = (currentUser, user) => {
     currentUser.alias = user.alias;
     res();
   });*/
-  currentUser.firstname = user.firstname;
-  currentUser.alias = user.alias;
+  currentUser.firstname = user.firstname ?? currentUser.firstname;
+  currentUser.alias = user.alias ?? currentUser.alias;
 
   return currentUser.save();
 };
