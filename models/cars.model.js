@@ -11,10 +11,20 @@ const cars = (sequelize) => {
         autoIncrementIdentity: true,
       },
 
-      brand: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
+      //   brand: {
+      //     type: DataTypes.STRING(50),
+      //     allowNull: false,
+      //   },
+
+      brand_id: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        references: {
+          model: "brand",
+          key: "id",
+        },
       },
+
       model: {
         type: DataTypes.STRING(50),
         allowNull: false,
@@ -30,6 +40,12 @@ const cars = (sequelize) => {
     },
     {
       paranoid: true,
+      indexes: [
+        {
+          name: "FK_car_brand",
+          fields: [{ name: "brand_id" }],
+        },
+      ],
     }
   );
 };
