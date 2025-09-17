@@ -1,6 +1,7 @@
 let data = require("../mock/carsdatas.json");
 const serviceCallResult = require("../responses/serviceCallResult.response");
 const carsRepository = require("../repositories/cars.repository");
+const brandService = require("./brands.services");
 
 const findAll = async (filters) => {
   console.log(Object.keys(filters));
@@ -23,11 +24,17 @@ const findOneById = async (id) => {
 };
 
 const create = async (car = {}) => {
-  const { brand, model, year, hp } = car;
+  const { brand_id, model, year, hp } = car;
 
-  if (brand && model && year && hp) {
-    await carsRepository.create(car);
-    return serviceCallResult.created();
+  if (brand_id && model && year && hp) {
+    const brandCallResult = await brandService.findOneById(brand_id);
+
+    if (brandCallResult.ok) {
+      await carsRepository.create(car);
+      return serviceCallResult.created();
+    } else {
+      return brandCallResult;
+    }
   }
 
   const errorDetails = ["A car must have "];
@@ -46,9 +53,15 @@ const update = async (id, newCar = {}) => {
 
   if (!car) return serviceCallResult.notFound(`car with id #${id} not found`);
 
-  await carsRepository.update(car, newCar);
+  const brandCallResult = await brandService.findOneById(newCar.brand_id);
 
-  return serviceCallResult.noContent();
+  if (brandCallResult.ok) {
+    await carsRepository.update(car, newCar);
+
+    return serviceCallResult.noContent();
+  } else {
+    return brandCallResult;
+  }
 };
 
 const remove = async (id) => {

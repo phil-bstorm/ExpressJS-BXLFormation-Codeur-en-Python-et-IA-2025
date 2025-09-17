@@ -1,5 +1,5 @@
 const {
-  models: { cars },
+  models: { cars, brands },
 } = require("../models/");
 
 //INTERNAL
@@ -11,7 +11,14 @@ findNextId = () => {
 //
 
 findAll = () => {
-  return cars.findAll();
+  return cars.findAll({
+    include: [
+      {
+        model: brands,
+        as: "brand",
+      },
+    ],
+  });
 };
 
 findFiltered = (filters) => {
@@ -31,9 +38,17 @@ findFiltered = (filters) => {
   });*/
 
   const where = {};
+
+  const brandInclude = {
+    model: brands,
+    as: "brand",
+    where: {},
+  };
+  const include = [brandInclude];
   if (filters.brand) {
-    where.brand = filters.brand;
+    brandInclude.where.name = filters.brand;
   }
+
   if (filters.model) {
     where.model = filters.model;
   }
@@ -63,6 +78,7 @@ findFiltered = (filters) => {
   // SELECT * FROM cars WHERE year >= 1999
   return cars.findAll({
     where,
+    include,
   });
 };
 
@@ -86,7 +102,7 @@ update = (currentCar, car) => {
   currentCar.model = car.model ?? currentCar.model;
   currentCar.hp = car.hp ?? currentCar.hp;
   currentCar.year = car.year ?? currentCar.year;
-  if (car.brand !== undefined) currentCar.brand = car.brand; // authorise la valeur "null"
+  if (car.brand_id !== undefined) currentCar.brand_id = car.brand_id; // authorise la valeur "null"
 
   return currentCar.save();
 };
